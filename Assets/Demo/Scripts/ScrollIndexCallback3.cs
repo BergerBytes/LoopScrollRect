@@ -2,15 +2,25 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class ScrollIndexCallback3 : MonoBehaviour
+public class ScrollIndexCallback3 : LoopScrollCell
 {
     public Text text;
-    void ScrollCellIndex(int idx)
+
+    public override void SetUpOneTimeThings(int index)
     {
-        string name = "Cell " + idx.ToString();
+    }
+
+    public override void PrepareForReuse(int index)
+    {
+        string name = "Cell " + index.ToString();
         if (text != null)
         {
             text.text = name;
         }
+    }
+
+    public void OnClick()
+    {
+        Debug.Log("Click!");
     }
 }

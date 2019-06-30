@@ -391,7 +391,10 @@ namespace UnityEngine.UI
                 {
                     if (itemTypeEnd < totalCount)
                     {
-                        dataSource.ProvideData(content.GetChild(i), itemTypeEnd);
+                        var child = content.GetChild(i);
+                        
+                        dataSource.ProvideData(child.GetComponent<LoopScrollCell>(), itemTypeEnd, false);
+
                         itemTypeEnd++;
                     }
                     else
@@ -611,11 +614,13 @@ namespace UnityEngine.UI
         }
 
         private RectTransform InstantiateNextItem(int itemIdx)
-        {            
-            RectTransform nextItem = prefabSource.GetObject().GetComponent<RectTransform>();
+        {
+            var nextObject = prefabSource.GetObject();
+            RectTransform nextItem = nextObject.GetComponent<RectTransform>();
+            LoopScrollCell cell = nextObject.GetComponent<LoopScrollCell>();
             nextItem.transform.SetParent(content, false);
             nextItem.gameObject.SetActive(true);
-            dataSource.ProvideData(nextItem, itemIdx);
+            dataSource.ProvideData(cell, itemIdx, true);
             return nextItem;
         }
         //==========LoopScrollRect==========

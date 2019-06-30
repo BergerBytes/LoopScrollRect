@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Sirenix.OdinInspector;
 
 namespace UnityEngine.UI
 {
     [System.Serializable]
+    [TableList]
     public class LoopScrollPrefabSource 
     {
-        public GameObject prefab;
+        public LoopScrollCell prefab;
         public int poolSize = 5;
 
         private bool inited = false;

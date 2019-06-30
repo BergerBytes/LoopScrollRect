@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
 
 
 namespace SG
@@ -39,7 +40,7 @@ namespace SG
                 return mInstance;
             }
         }
-        public void InitPool(GameObject prefab, int size, PoolInflationType type = PoolInflationType.DOUBLE)
+        public void InitPool(LoopScrollCell prefab, int size, PoolInflationType type = PoolInflationType.DOUBLE)
         {
             var poolName = prefab.name;
             
@@ -49,7 +50,7 @@ namespace SG
             }
             else
             {
-                GameObject pb = Instantiate(prefab);
+                GameObject pb = Instantiate(prefab.gameObject);
                 if (pb == null)
                 {
                     Debug.LogError("[ResourceManager] Invalide prefab name for pooling :" + poolName);
@@ -65,7 +66,7 @@ namespace SG
         /// </summary>
         /// <param name="prefab"></param>
         /// <returns></returns>
-        public GameObject GetObjectFromPool(GameObject prefab, bool autoActive = true, int autoCreate = 0)
+        public GameObject GetObjectFromPool(LoopScrollCell prefab, bool autoActive = true, int autoCreate = 0)
         {
             var poolName = prefab.name;
             GameObject result = null;

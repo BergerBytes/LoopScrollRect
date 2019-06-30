@@ -5,7 +5,7 @@ namespace UnityEngine.UI
 {
     public abstract class LoopScrollDataSource
     {
-        public abstract void ProvideData(Transform transform, int idx);
+        public abstract void ProvideData(LoopScrollCell cell, int idx, bool initialized);
     }
 
 	public class LoopScrollSendIndexSource : LoopScrollDataSource
@@ -14,9 +14,14 @@ namespace UnityEngine.UI
 
 		LoopScrollSendIndexSource(){}
 
-        public override void ProvideData(Transform transform, int idx)
+        public override void ProvideData(LoopScrollCell cell, int index, bool initialized)
         {
-            transform.SendMessage("ScrollCellIndex", idx);
+            if (initialized)
+            {
+                cell.SetUpOneTimeThings(index);
+            }
+            
+            cell.PrepareForReuse(index);
         }
     }
 
@@ -29,9 +34,14 @@ namespace UnityEngine.UI
             this.objectsToFill = objectsToFill;
         }
 
-        public override void ProvideData(Transform transform, int idx)
+        public override void ProvideData(LoopScrollCell cell, int index, bool initialized)
         {
-            transform.SendMessage("ScrollCellContent", objectsToFill[idx]);
+            if (initialized)
+            {
+                cell.SetUpOneTimeThings(index);
+            }
+            
+            cell.PrepareForReuse(index);
         }
     }
 }
