@@ -39,15 +39,17 @@ namespace SG
                 return mInstance;
             }
         }
-        public void InitPool(string poolName, int size, PoolInflationType type = PoolInflationType.DOUBLE)
+        public void InitPool(GameObject prefab, int size, PoolInflationType type = PoolInflationType.DOUBLE)
         {
+            var poolName = prefab.name;
+            
             if (poolDict.ContainsKey(poolName))
             {
                 return;
             }
             else
             {
-                GameObject pb = Resources.Load<GameObject>(poolName);
+                GameObject pb = Instantiate(prefab);
                 if (pb == null)
                 {
                     Debug.LogError("[ResourceManager] Invalide prefab name for pooling :" + poolName);
@@ -61,15 +63,16 @@ namespace SG
         /// Returns an available object from the pool 
         /// OR null in case the pool does not have any object available & can grow size is false.
         /// </summary>
-        /// <param name="poolName"></param>
+        /// <param name="prefab"></param>
         /// <returns></returns>
-        public GameObject GetObjectFromPool(string poolName, bool autoActive = true, int autoCreate = 0)
+        public GameObject GetObjectFromPool(GameObject prefab, bool autoActive = true, int autoCreate = 0)
         {
+            var poolName = prefab.name;
             GameObject result = null;
 
             if (!poolDict.ContainsKey(poolName) && autoCreate > 0)
             {
-                InitPool(poolName, autoCreate, PoolInflationType.INCREMENT);
+                InitPool(prefab, autoCreate, PoolInflationType.INCREMENT);
             }
 
             if (poolDict.ContainsKey(poolName))
