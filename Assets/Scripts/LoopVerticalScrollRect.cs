@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 namespace UnityEngine.UI
 {
@@ -8,6 +9,8 @@ namespace UnityEngine.UI
     [DisallowMultipleComponent]
     public class LoopVerticalScrollRect : LoopScrollRect
     {
+        private float yOffset = 0;
+        private GridLayoutGroup layout;
         protected override float GetSize(RectTransform item)
         {
             float size = contentSpacing;
@@ -34,14 +37,39 @@ namespace UnityEngine.UI
 
         protected override void Awake()
         {
+            layout = content.GetComponent<GridLayoutGroup>();
+            UpdateContentLayout();
             base.Awake();
             directionSign = -1;
 
-            GridLayoutGroup layout = content.GetComponent<GridLayoutGroup>();
             if (layout != null && layout.constraint != GridLayoutGroup.Constraint.FixedColumnCount)
             {
                 Debug.LogError("[LoopHorizontalScrollRect] unsupported GridLayoutGroup constraint");
             }
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            UpdateContentLayout();
+        }
+
+        public void UpdateContentLayout()
+        {
+            Debug.Log(viewRect.rect.width);
+            var rect = viewRect.rect;
+            var cellSize = layout.cellSize;
+            
+            var maxCellCount = (int) (rect.width / cellSize.x);
+            var remainderSpaceAvailable = rect.width % cellSize.x;
+
+            if (remainderSpaceAvailable >= (maxCellCount - 1) * layout.spacing.x)
+            {
+                layout.constraintCount = maxCellCount;
+                return;
+            }
+            
+            layout.constraintCount = maxCellCount - 1;
         }
 
         protected override bool UpdateItems(Bounds viewBounds, Bounds contentBounds)
