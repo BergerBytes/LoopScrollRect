@@ -1181,7 +1181,7 @@ namespace UnityEngine.UI
             }
         }
 
-        private void UpdateBounds(bool updateItems = false)
+        protected void UpdateBounds(bool updateItems = false)
         {
             m_ViewBounds = new Bounds(viewRect.rect.center, viewRect.rect.size);
             m_ContentBounds = GetBounds();
